@@ -159,16 +159,6 @@
           </div>
         </div>
       </div>
-
-      <footer class="text-center mt-16 text-gray-600 text-xs uppercase tracking-[0.2em]">
-        <div class="inline-flex items-center gap-3">
-          <div class="w-1.5 h-1.5 bg-gray-700 rounded-full"></div>
-          <span>Excellence in Education</span>
-          <div class="w-1.5 h-1.5 bg-gray-700 rounded-full"></div>
-          <span>Mens et Manus</span>
-          <div class="w-1.5 h-1.5 bg-gray-700 rounded-full"></div>
-        </div>
-      </footer>
     </div>
   </div>
 </template>
