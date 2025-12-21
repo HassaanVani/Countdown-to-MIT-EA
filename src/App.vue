@@ -15,7 +15,7 @@
           <div class="h-0.5 bg-gradient-to-r from-transparent via-mit-red to-transparent glow-line"></div>
         </div>
         <h1 class="text-3xl md:text-4xl font-light text-gray-300 mb-3 tracking-wide">
-          Early Action · Class of 2030
+          Early Action · Class of 2031
         </h1>
         <p class="text-sm text-gray-500 uppercase tracking-[0.2em]">
           Application Deadline Countdown
