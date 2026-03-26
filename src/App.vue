@@ -55,14 +55,14 @@
 
       <div class="grid md:grid-cols-3 gap-6 mb-8">
         <div class="glass-card-subtle rounded-2xl p-6 hover-lift-subtle">
-          <div class="text-3xl font-light text-mit-red mb-2">4.5%</div>
+          <div class="text-3xl font-light text-mit-red mb-2">4.6%</div>
           <div class="text-sm text-gray-400">Acceptance Rate</div>
-          <div class="text-xs text-gray-600 mt-1">Class of 2029</div>
+          <div class="text-xs text-gray-600 mt-1">Class of 2030</div>
         </div>
         <div class="glass-card-subtle rounded-2xl p-6 hover-lift-subtle">
-          <div class="text-3xl font-light text-white mb-2">1,324</div>
+          <div class="text-3xl font-light text-white mb-2">1,299</div>
           <div class="text-sm text-gray-400">Students Admitted</div>
-          <div class="text-xs text-gray-600 mt-1">Out of 29,282</div>
+          <div class="text-xs text-gray-600 mt-1">Out of 28,349</div>
         </div>
         <div class="glass-card-subtle rounded-2xl p-6 hover-lift-subtle">
           <div class="text-3xl font-light text-white mb-2">Non-Binding</div>
