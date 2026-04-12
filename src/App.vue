@@ -497,8 +497,16 @@ const progressPercentage = computed(() => (completedItems.value / checklistItems
 
 const toggleItem = (index) => {
   checklistItems.value[index].completed = !checklistItems.value[index].completed
-  localStorage.setItem('mitChecklistState', JSON.stringify(checklistItems.value))
 }
+
+// Persist only completion states keyed by title
+const saveChecklist = () => {
+  const state = {}
+  checklistItems.value.forEach((item) => { state[item.title] = item.completed })
+  localStorage.setItem('mitChecklistState', JSON.stringify(state))
+}
+
+watch(checklistItems, saveChecklist, { deep: true })
 
 // ===== Widget Dragging =====
 const isDragging = ref(false)
@@ -643,8 +651,19 @@ onMounted(() => {
   if (savedChecklist) {
     try {
       const saved = JSON.parse(savedChecklist)
-      if (Array.isArray(saved) && saved.length === checklistItems.value.length) {
-        checklistItems.value = saved
+      if (Array.isArray(saved)) {
+        // Migrate old format: array of full objects -> title-keyed map
+        const state = {}
+        saved.forEach((item) => { if (item.title) state[item.title] = !!item.completed })
+        checklistItems.value.forEach((item) => {
+          if (state[item.title] !== undefined) item.completed = state[item.title]
+        })
+        saveChecklist()
+      } else if (saved && typeof saved === 'object') {
+        // New format: { title: boolean }
+        checklistItems.value.forEach((item) => {
+          if (saved[item.title] !== undefined) item.completed = saved[item.title]
+        })
       }
     } catch (e) {
       console.error('Error loading saved checklist:', e)
