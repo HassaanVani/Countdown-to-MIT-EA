@@ -34,6 +34,18 @@
       <div class="bg-title gradient-text">MIT</div>
       <div class="bg-date-label">Early Action · November 1, 2026</div>
 
+      <!-- Mini Timer (Background Mode) -->
+      <div v-if="!appIsOpen" class="mini-timer-bg mt-4">
+        <span class="text-[0.65rem] text-gray-500 uppercase tracking-widest mr-3">Apps open in</span>
+        <span class="text-sm text-gray-400 font-light tabular-nums">
+          {{ appOpenDays }}d {{ appOpenHours.toString().padStart(2, '0') }}h {{ appOpenMinutes.toString().padStart(2, '0') }}m {{ appOpenSeconds.toString().padStart(2, '0') }}s
+        </span>
+      </div>
+      <div v-else class="mini-timer-bg mt-4">
+        <div class="pulse-dot-sm mr-2"></div>
+        <span class="text-[0.65rem] text-mit-red/70 uppercase tracking-widest">Applications Open</span>
+      </div>
+
       <div class="flex items-end gap-4 md:gap-6 mt-4">
         <div v-for="(unit, i) in timeUnits" :key="unit.label" class="countdown-digit-group">
           <div class="countdown-number" :class="{ tick: unit.ticked }">
@@ -74,9 +86,21 @@
           </div>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
-          <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider">Nov 1 · 11:59 PM EST</span>
-          <span class="text-[0.6rem] text-mit-red/60 uppercase tracking-wider">Class of 2031</span>
+        <div class="mt-4 pt-3 border-t border-white/5">
+          <div v-if="!appIsOpen" class="flex items-center justify-between mb-2">
+            <span class="text-[0.55rem] text-gray-500 uppercase tracking-wider">Apps open in</span>
+            <span class="text-[0.65rem] text-gray-400 font-light tabular-nums">
+              {{ appOpenDays }}d {{ appOpenHours.toString().padStart(2, '0') }}h {{ appOpenMinutes.toString().padStart(2, '0') }}m {{ appOpenSeconds.toString().padStart(2, '0') }}s
+            </span>
+          </div>
+          <div v-else class="flex items-center gap-1.5 mb-2">
+            <div class="pulse-dot-sm"></div>
+            <span class="text-[0.55rem] text-mit-red/70 uppercase tracking-wider">Applications Open</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider">Nov 1 · 11:59 PM EST</span>
+            <span class="text-[0.6rem] text-mit-red/60 uppercase tracking-wider">Class of 2031</span>
+          </div>
         </div>
       </div>
     </div>
@@ -97,6 +121,35 @@
           Early Action · Class of 2031
         </h1>
       </header>
+
+      <!-- Mini Timer: Applications Open -->
+      <div class="mini-timer-wrapper animate-fade-up mb-6">
+        <div v-if="!appIsOpen" class="mini-timer">
+          <div class="mini-timer-label">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Applications Open In</span>
+          </div>
+          <div class="mini-timer-digits">
+            <span class="mini-digit">{{ appOpenDays }}<span class="mini-unit">d</span></span>
+            <span class="mini-sep">:</span>
+            <span class="mini-digit">{{ appOpenHours.toString().padStart(2, '0') }}<span class="mini-unit">h</span></span>
+            <span class="mini-sep">:</span>
+            <span class="mini-digit">{{ appOpenMinutes.toString().padStart(2, '0') }}<span class="mini-unit">m</span></span>
+            <span class="mini-sep">:</span>
+            <span class="mini-digit">{{ appOpenSeconds.toString().padStart(2, '0') }}<span class="mini-unit">s</span></span>
+          </div>
+          <div class="mini-timer-date">August 1, 2026</div>
+        </div>
+        <div v-else class="mini-timer mini-timer-open">
+          <div class="mini-timer-label">
+            <div class="pulse-dot-sm"></div>
+            <span>Applications Are Open</span>
+          </div>
+          <div class="mini-timer-date">Submit by November 1, 2026 · 11:59 PM EST</div>
+        </div>
+      </div>
 
       <!-- Countdown -->
       <div class="glass-card rounded-3xl p-10 md:p-14 mb-10 animate-fade-up">
@@ -317,6 +370,31 @@ const updateCountdown = () => {
   hours.value = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
   minutes.value = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
   seconds.value = Math.floor((distance % (1000 * 60)) / 1000)
+}
+
+// ===== Application Open Countdown =====
+const appOpenDate = new Date('2026-08-01T00:00:00-04:00')
+const appOpenDays = ref(0)
+const appOpenHours = ref(0)
+const appOpenMinutes = ref(0)
+const appOpenSeconds = ref(0)
+const appIsOpen = ref(false)
+
+const updateAppOpenCountdown = () => {
+  const now = new Date().getTime()
+  const distance = appOpenDate - now
+
+  if (distance < 0) {
+    appIsOpen.value = true
+    appOpenDays.value = appOpenHours.value = appOpenMinutes.value = appOpenSeconds.value = 0
+    return
+  }
+
+  appIsOpen.value = false
+  appOpenDays.value = Math.floor(distance / (1000 * 60 * 60 * 24))
+  appOpenHours.value = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  appOpenMinutes.value = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+  appOpenSeconds.value = Math.floor((distance % (1000 * 60)) / 1000)
 }
 
 // ===== Checklist =====
@@ -552,7 +630,11 @@ let quoteInterval = null
 
 onMounted(() => {
   updateCountdown()
-  countdownInterval = setInterval(updateCountdown, 1000)
+  updateAppOpenCountdown()
+  countdownInterval = setInterval(() => {
+    updateCountdown()
+    updateAppOpenCountdown()
+  }, 1000)
   quoteInterval = setInterval(() => {
     quoteIndex.value = (quoteIndex.value + 1) % quotes.length
   }, 12000)
