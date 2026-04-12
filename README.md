@@ -12,4 +12,4 @@ Vue.js, Vite, Tailwind CSS
 
 ## Live Demo
 
-`[DEMO_URL_PLACEHOLDER]`
+`https://countdowntomit.netlify.app`
