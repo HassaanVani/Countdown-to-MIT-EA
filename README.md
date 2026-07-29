@@ -1,15 +1,21 @@
-# MIT EA Countdown
+# Countdown-to-MIT-EA
 
-> A countdown timer for MIT Early Action decision day.
+## Project description
 
-## Overview
+Small countdown web application for the MIT EA milestone.
 
-A personal project counting down to MIT Early Admissions decisions. Built with Vue.js for a clean, responsive timer display.
+## Architecture
 
-## Tech Stack
+`src/App.vue` owns the countdown UI; `main.js` bootstraps Vue; styles and Vite configuration support the deployable static app.
 
-Vue.js, Vite, Tailwind CSS
+## Technology
 
-## Live Demo
+Vue • JavaScript • Vite • Tailwind
 
-`https://countdowntomit.netlify.app`
+## Run locally
+
+`npm install && npm run dev`
+
+## Repository guide
+
+The implementation is organized so that entry points remain thin and domain-specific logic stays in the modules named above. Configuration, assets, and deployment files are kept separate from application code. Review the source tree before changing behavior, and keep secrets in local environment files rather than committing them.
