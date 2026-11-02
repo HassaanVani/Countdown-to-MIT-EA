@@ -704,3 +704,57 @@
     }
   }
 }
+/* The deadline sequence */
+.launch-stage { --accent: #f36b82; position: relative; z-index: 20; min-height: 100svh; display: grid; place-items: center; overflow: hidden; text-align: center; padding: 100px 24px 60px; background: radial-gradient(ellipse at 50% 75%, #70182e66, transparent 65%), #050507ee; transition: background 2s; }
+.launch-content { position: relative; z-index: 2; width: min(1100px, 100%); }
+.launch-eyebrow { font-size: 10px; letter-spacing: .4em; color: #c6b3b8; margin-bottom: 60px; }
+.launch-chapter { font-size: 11px; letter-spacing: .25em; color: var(--accent); margin-bottom: 18px; }
+.launch-stage h2 { font-size: clamp(30px, 5.5vw, 72px); font-weight: 200; letter-spacing: -.055em; line-height: 1.08; }
+.launch-subtitle { color: #c0adb4; font-size: 14px; margin: 22px auto 0; max-width: 540px; line-height: 1.7; }
+.launch-clock { display: flex; justify-content: center; gap: clamp(16px, 4vw, 65px); margin: 45px auto; }
+.launch-unit span { display: block; font-size: clamp(46px, 10vw, 135px); font-weight: 200; letter-spacing: -.06em; line-height: 1.1; font-variant-numeric: tabular-nums; text-shadow: 0 0 65px #ed3a6355; }
+.launch-unit small { display: block; color: #b69da7; font-size: 9px; letter-spacing: .25em; margin-top: 14px; }
+.launch-checkpoints { display: flex; justify-content: center; gap: 22px; margin-bottom: 30px; }
+.launch-checkpoints span { font-size: 9px; letter-spacing: .12em; padding-top: 12px; border-top: 1px solid #ffffff25; color: #8e7c83; }
+.launch-checkpoints .reached { color: #ffc9b6; border-color: #fa8f75; text-shadow: 0 0 18px #ff8464; }
+.launch-date { font-size: 10px; letter-spacing: .2em; color: #c5aeb6; }
+.launch-link { display: inline-block; margin: 26px 0 10px; padding: 14px 24px; border: 1px solid #e47b8a66; border-radius: 30px; font-size: 13px; color: #ffe6e9; background: #a31f3426; }
+.launch-link:hover { background: #a31f3466; }
+.launch-link:focus-visible { outline: 2px solid white; outline-offset: 5px; }
+.launch-note, .estimate-note { font-size: 11px; color: #ac98a1; line-height: 1.6; max-width: 560px; margin: 10px auto; }
+.orbit { position: absolute; width: min(85vw, 1000px); aspect-ratio: 1; border: 1px solid #ff788315; border-radius: 50%; pointer-events: none; }
+.orbit-one { transform: rotateX(65deg) rotate(-25deg); animation: orbital 30s linear infinite; }
+.orbit-two { width: min(120vw, 1500px); transform: rotateX(55deg) rotate(25deg); }
+.launch-grid { position: absolute; inset: 0; opacity: .12; background-image: linear-gradient(#f68c9f33 1px, transparent 1px), linear-gradient(90deg,#f68c9f33 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse, black, transparent 70%); }
+.hour { background-color: #11070c; }
+.hour .orbit, .ten-minutes .orbit { border-color: #ff788340; }
+.ten-minutes { background: radial-gradient(ellipse at bottom, #8d203c88, #090508 75%); }
+.minute, .ten, .ceremony { position: fixed; inset: 0; z-index: 60; overflow-y: auto; padding-top: 45px; padding-bottom: 35px; background: radial-gradient(ellipse, #66132c, #090508 72%); }
+.minute .launch-eyebrow, .ten .launch-eyebrow { margin-bottom: 24px; }
+.solo-clock { position: relative; width: clamp(190px, 29vh, 340px); height: clamp(190px, 29vh, 340px); align-items: center; flex-direction: column; gap: 0; margin: 28px auto; justify-content: center; }
+.second-orbit { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#ffa8a4 var(--sweep), #ffffff12 0); mask: radial-gradient(transparent 68%, black 69%); }
+.hero-second { font-size: clamp(100px, 19vh, 230px); line-height: 1; font-weight: 200; font-variant-numeric: tabular-nums; text-shadow: 0 0 65px #ff668d99; animation: second-arrival .7s ease-out; }
+.solo-label { font-size: 8px; letter-spacing: .2em; margin-top: 14px; color: #edbdc8; }
+.ten { background: radial-gradient(ellipse, #9a3143, #130710 78%); }
+.ten .hero-second { color: #fff0ce; font-weight: 500; animation: final-arrival .85s ease-out; text-shadow: 0 0 70px #ffd19888; }
+.ten .orbit { border: 2px solid #ffe5b055; animation: expanding-ring 2s ease-out infinite; }
+.decisions, .released { --accent: #edc795; background: radial-gradient(ellipse at 50% 80%, #72512a40, transparent 70%), #06080eee; }
+.decisions .orbit, .released .orbit { border-color: #edc79533; }
+.ceremony { background: radial-gradient(ellipse, #a36c3e88, #080810 75%); animation: chapter-reveal 3s ease-out; }
+.chapter-star { color: #ffe1a7; font-size: 160px; padding: 25px; animation: star-reveal 6s ease-out both; text-shadow: 0 0 100px #f8c378; }
+.chapter-enter-active, .chapter-leave-active { transition: opacity .45s, transform .45s; }
+.chapter-enter-from { opacity: 0; transform: translateY(18px); }
+.chapter-leave-to { opacity: 0; transform: translateY(-18px); }
+@keyframes second-arrival { from { opacity: .5; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
+@keyframes final-arrival { from { opacity: .3; transform: scale(1.4); filter: blur(5px); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
+@keyframes expanding-ring { from { transform: scale(.65); opacity: .8; } to { transform: scale(1.5); opacity: 0; } }
+@keyframes orbital { to { transform: rotateX(65deg) rotate(335deg); } }
+@keyframes chapter-reveal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes star-reveal { from { transform: scale(.1) rotate(-90deg); opacity: 0; } to { transform: scale(1) rotate(90deg); opacity: 1; } }
+@media (max-width: 600px) { .launch-stage { padding-left: 16px; padding-right: 16px; } .launch-checkpoints { gap: 12px; } .launch-checkpoints span { font-size: 8px; } .launch-eyebrow { font-size: 8px; letter-spacing: .2em; } .launch-chapter { font-size: 9px; } .launch-subtitle { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .launch-stage *, .launch-stage { animation: none !important; transition: none !important; } }
+[data-view="widget"] .launch-stage:not(.minute):not(.ten):not(.ceremony) { display: none; }
+[data-view="background"] .launch-stage { position: fixed; inset: 0; overflow-y: auto; }
+[data-view="background"] .bg-mode-overlay { display: none; }
+.preview-banner { padding: 10px; margin-bottom: 24px; border: 1px solid #ffd28c66; color: #ffd28c; font-size: 11px; }
+.preview-banner button { margin-left: 15px; text-decoration: underline; }

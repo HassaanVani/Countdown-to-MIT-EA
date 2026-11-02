@@ -1,10 +1,11 @@
 <template>
-  <div class="min-h-screen relative" :class="{ 'overflow-hidden h-screen': mode !== 'full' }">
+  <div :data-view="mode" class="min-h-screen relative" :class="{ 'overflow-hidden h-screen': mode !== 'full' }">
     <!-- Particle Canvas -->
     <canvas ref="canvasRef" class="particle-canvas"></canvas>
     <!-- Aurora Background -->
     <div class="aurora-bg"></div>
 
+    <LaunchCountdown :state="launchState" />
     <!-- Mode Switcher -->
     <div class="mode-switcher">
       <button
@@ -32,7 +33,7 @@
     <!-- ============ BACKGROUND MODE ============ -->
     <div v-if="mode === 'background'" class="bg-mode-overlay bg-mode">
       <div class="bg-title gradient-text">MIT</div>
-      <div class="bg-date-label">Early Action · November 1, 2026</div>
+      <div class="bg-date-label">{{ launchState.decisions ? 'Early Action · Estimated decisions' : 'Early Action · November 1, 2026' }}</div>
 
       <!-- Mini Timer (Background Mode) -->
       <div v-if="!appIsOpen" class="mini-timer-bg mt-4">
@@ -43,7 +44,7 @@
       </div>
       <div v-else class="mini-timer-bg mt-4">
         <div class="pulse-dot-sm mr-2"></div>
-        <span class="text-[0.65rem] text-mit-red/70 uppercase tracking-widest">Applications Open</span>
+        <span class="text-[0.65rem] text-mit-red/70 uppercase tracking-widest">{{ launchState.decisions ? "Deadline passed" : "Applications Open" }}</span>
       </div>
 
       <div class="flex items-end gap-4 md:gap-6 mt-4">
@@ -95,10 +96,10 @@
           </div>
           <div v-else class="flex items-center gap-1.5 mb-2">
             <div class="pulse-dot-sm"></div>
-            <span class="text-[0.55rem] text-mit-red/70 uppercase tracking-wider">Applications Open</span>
+            <span class="text-[0.55rem] text-mit-red/70 uppercase tracking-wider">{{ launchState.decisions ? "Deadline passed" : "Applications Open" }}</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider">Nov 1 · 11:59 PM EST</span>
+            <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider">{{ launchState.decisions ? "Dec 16 · Estimated" : "Nov 1 · 11:59 PM EST" }}</span>
             <span class="text-[0.6rem] text-mit-red/60 uppercase tracking-wider">Class of 2031</span>
           </div>
         </div>
@@ -110,7 +111,7 @@
 
       <!-- Header -->
       <header class="text-center mb-24 animate-fade-in">
-        <div class="section-label mb-6">Application Deadline Countdown</div>
+        <div class="section-label mb-6">{{ launchState.decisions ? 'Estimated Decision Countdown' : 'Application Deadline Countdown' }}</div>
         <div class="inline-block mb-6">
           <div class="text-[8rem] md:text-[10rem] font-extralight leading-none gradient-text tracking-tighter">
             MIT
@@ -145,9 +146,9 @@
         <div v-else class="mini-timer mini-timer-open">
           <div class="mini-timer-label">
             <div class="pulse-dot-sm"></div>
-            <span>Applications Are Open</span>
+            <span>{{ launchState.decisions ? 'Application deadline passed' : 'Applications Are Open' }}</span>
           </div>
-          <div class="mini-timer-date">Submit by November 1, 2026 · 11:59 PM EST</div>
+          <div class="mini-timer-date">{{ launchState.decisions ? 'Estimated decisions: December 16, 2026 · 6:28 PM EST' : 'Submit by November 1, 2026 · 11:59 PM EST' }}</div>
         </div>
       </div>
 
@@ -169,13 +170,13 @@
           <div class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-8 text-sm">
             <div class="flex items-center gap-3">
               <div class="pulse-dot"></div>
-              <span class="text-gray-500">Deadline</span>
-              <span class="text-white font-light">November 1, 2026 · 11:59 PM EST</span>
+              <span class="text-gray-500">{{ launchState.decisions ? "Estimated decisions" : "Deadline" }}</span>
+              <span class="text-white font-light">{{ launchState.decisions ? "December 16, 2026 · 6:28 PM EST" : "November 1, 2026 · 11:59 PM EST" }}</span>
             </div>
             <div class="hidden md:block w-px h-4 bg-white/10"></div>
             <div class="flex items-center gap-3">
               <span class="text-gray-600">Decisions</span>
-              <span class="text-gray-400 font-light">Mid-December 2026</span>
+              <span class="text-gray-400 font-light">December 16 · Estimated</span>
             </div>
           </div>
         </div>
@@ -293,6 +294,8 @@
 </template>
 
 <script setup>
+import LaunchCountdown from './LaunchCountdown.vue'
+import { countdownState } from './countdown.js'
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 
 // ===== View Mode =====
@@ -334,7 +337,7 @@ const quoteIndex = ref(Math.floor(Math.random() * quotes.length))
 const currentQuote = computed(() => quotes[quoteIndex.value])
 
 // ===== Countdown =====
-const targetDate = new Date('2026-11-01T23:59:59-05:00')
+const launchState = ref(countdownState(Date.now()))
 const days = ref(0)
 const hours = ref(0)
 const minutes = ref(0)
@@ -358,18 +361,8 @@ const updateCountdown = () => {
   prevMinutes.value = minutes.value
   prevSeconds.value = seconds.value
 
-  const now = new Date().getTime()
-  const distance = targetDate - now
-
-  if (distance < 0) {
-    days.value = hours.value = minutes.value = seconds.value = 0
-    return
-  }
-
-  days.value = Math.floor(distance / (1000 * 60 * 60 * 24))
-  hours.value = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  minutes.value = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-  seconds.value = Math.floor((distance % (1000 * 60)) / 1000)
+  launchState.value = countdownState(Date.now())
+  ;[days.value, hours.value, minutes.value, seconds.value] = launchState.value.units
 }
 
 // ===== Application Open Countdown =====
@@ -642,7 +635,7 @@ onMounted(() => {
   countdownInterval = setInterval(() => {
     updateCountdown()
     updateAppOpenCountdown()
-  }, 1000)
+  }, 100)
   quoteInterval = setInterval(() => {
     quoteIndex.value = (quoteIndex.value + 1) % quotes.length
   }, 12000)
