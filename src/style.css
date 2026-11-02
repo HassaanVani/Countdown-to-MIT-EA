@@ -758,3 +758,11 @@
 [data-view="background"] .bg-mode-overlay { display: none; }
 .preview-banner { padding: 10px; margin-bottom: 24px; border: 1px solid #ffd28c66; color: #ffd28c; font-size: 11px; }
 .preview-banner button { margin-left: 15px; text-decoration: underline; }
+.cycle-timeline { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 45px auto 20px; padding: 0; text-align: left; }
+.cycle-timeline li { border-top: 1px solid #ffffff20; padding: 12px 8px; color: #b8a8b0; }
+.cycle-timeline li.current { border-color: #edc795; color: #ffe1b4; background: #edc7950a; }
+.cycle-timeline li.past { opacity: .5; }
+.cycle-timeline span { display: block; font-size: 11px; line-height: 1.5; }
+.cycle-timeline small { display: block; font-size: 9px; line-height: 1.6; margin-top: 6px; }
+.minute .cycle-timeline, .ten .cycle-timeline, .ceremony .cycle-timeline { display: none; }
+.estimate-note a { text-decoration: underline; text-underline-offset: 3px; }

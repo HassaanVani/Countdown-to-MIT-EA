@@ -23,10 +23,24 @@ The implementation is organized so that entry points remain thin and domain-spec
 
 `https://countdowntomit.netlify.app`
 
-## Deadline sequence
+## Recurring admissions calendar
 
-The countdown targets November 1, 2026 at 11:59:59 PM EST. Checkpoints activate at one hour, ten minutes, one minute, and ten seconds. The final minute takes over every view mode. At the deadline, an eight-second transition leads into the estimated decisions countdown (December 16, 2026 at 6:28 PM EST, based on MIT's 2025 announcement). Passing the deadline does not imply successful submission.
+The app automatically follows each cycle in chronological order:
 
-Run `npm run dev` to view locally. Add `?preview=75` to the local URL to rehearse the final 75 seconds, transition, and decisions screen. Use `?preview=3610` or `?preview=610` for the hour and ten-minute checkpoints. Preview time is isolated from the real timer and clearly labeled; exit preview to restore the real clock.
+1. Early Action deadline: November 1.
+2. EA decisions: estimated December 16, 6:28 PM Eastern.
+3. Regular Action deadline: January 4 of the following year.
+4. RA decisions: estimated March 14, 6:28 PM Eastern.
+5. Enrollment decision day: May 1.
+6. Waitlist planning checkpoint: estimated May 15 at noon Eastern, not a guaranteed release.
+7. Seven-day app grace period, followed by next year's EA deadline countdown.
 
-The decision date is an estimate, not a confirmed MIT announcement. Dates and phase boundaries live in `src/countdown.js`.
+MIT does not guarantee waitlist news on May 15 or closure by the end of the app grace period. All decision estimates are labeled, with official sources beside the timer. Verify deadlines and exact submission times in the portal. Future annual dates follow current published patterns until updated.
+
+`src/countdown.js` owns the calendar. `CYCLE_OVERRIDES[fallYear][eventId]` can replace an event's timestamp (`at`), estimate flag, note, and source when MIT announces dates. Times are interpreted in America/New_York with daylight-saving handling. The class year and timeline advance automatically. Checklist completion is stored by cycle year, with original 2026 checklist data migrated on load.
+
+Both EA and RA deadlines use the one-hour, ten-minute, final-minute, and ten-second escalation. Every milestone transition gets the chapter ceremony.
+
+Run `npm run dev` locally. Add `?preview=75` to rehearse the original EA finale and the transition. Preview is isolated from the real timer. Use `?preview=3610` or `?preview=610` for earlier checkpoints.
+
+Run `npm test` for milestone boundaries, annual rollover, grace duration, DST, checkpoints, and date overrides. Run `npm run build` for the production build.

@@ -33,7 +33,7 @@
     <!-- ============ BACKGROUND MODE ============ -->
     <div v-if="mode === 'background'" class="bg-mode-overlay bg-mode">
       <div class="bg-title gradient-text">MIT</div>
-      <div class="bg-date-label">{{ launchState.decisions ? 'Early Action · Estimated decisions' : 'Early Action · November 1, 2026' }}</div>
+      <div class="bg-date-label">{{ launchState.event.label }}</div>
 
       <!-- Mini Timer (Background Mode) -->
       <div v-if="!appIsOpen" class="mini-timer-bg mt-4">
@@ -73,7 +73,7 @@
         <div class="flex items-center justify-between mb-4">
           <div>
             <div class="text-lg font-light gradient-text tracking-wide">MIT</div>
-            <div class="text-[0.6rem] text-gray-500 uppercase tracking-widest">Early Action 2026</div>
+            <div class="text-[0.6rem] text-gray-500 uppercase tracking-widest">{{ launchState.event.label }}</div>
           </div>
           <div class="pulse-dot"></div>
         </div>
@@ -99,122 +99,23 @@
             <span class="text-[0.55rem] text-mit-red/70 uppercase tracking-wider">{{ launchState.decisions ? "Deadline passed" : "Applications Open" }}</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider">{{ launchState.decisions ? "Dec 16 · Estimated" : "Nov 1 · 11:59 PM EST" }}</span>
-            <span class="text-[0.6rem] text-mit-red/60 uppercase tracking-wider">Class of 2031</span>
+            <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider">{{ launchState.event.label }}</span>
+            <span class="text-[0.6rem] text-mit-red/60 uppercase tracking-wider">Class of {{ launchState.classYear }}</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ============ FULL MODE ============ -->
-    <div v-if="mode === 'full'" class="max-w-6xl mx-auto px-4 py-16 relative z-10">
+    <div v-if="mode === 'full' && launchState.applicationDeadline" class="max-w-6xl mx-auto px-4 py-16 relative z-10">
 
-      <!-- Header -->
-      <header class="text-center mb-24 animate-fade-in">
-        <div class="section-label mb-6">{{ launchState.decisions ? 'Estimated Decision Countdown' : 'Application Deadline Countdown' }}</div>
-        <div class="inline-block mb-6">
-          <div class="text-[8rem] md:text-[10rem] font-extralight leading-none gradient-text tracking-tighter">
-            MIT
-          </div>
-          <div class="h-px bg-gradient-to-r from-transparent via-mit-red to-transparent glow-line mt-2"></div>
-        </div>
-        <h1 class="text-2xl md:text-3xl font-extralight text-gray-400 tracking-wide">
-          Early Action · Class of 2031
-        </h1>
-      </header>
-
-      <!-- Mini Timer: Applications Open -->
-      <div class="mini-timer-wrapper animate-fade-up mb-6">
-        <div v-if="!appIsOpen" class="mini-timer">
-          <div class="mini-timer-label">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>Applications Open In</span>
-          </div>
-          <div class="mini-timer-digits">
-            <span class="mini-digit">{{ appOpenDays }}<span class="mini-unit">d</span></span>
-            <span class="mini-sep">:</span>
-            <span class="mini-digit">{{ appOpenHours.toString().padStart(2, '0') }}<span class="mini-unit">h</span></span>
-            <span class="mini-sep">:</span>
-            <span class="mini-digit">{{ appOpenMinutes.toString().padStart(2, '0') }}<span class="mini-unit">m</span></span>
-            <span class="mini-sep">:</span>
-            <span class="mini-digit">{{ appOpenSeconds.toString().padStart(2, '0') }}<span class="mini-unit">s</span></span>
-          </div>
-          <div class="mini-timer-date">August 1, 2026</div>
-        </div>
-        <div v-else class="mini-timer mini-timer-open">
-          <div class="mini-timer-label">
-            <div class="pulse-dot-sm"></div>
-            <span>{{ launchState.decisions ? 'Application deadline passed' : 'Applications Are Open' }}</span>
-          </div>
-          <div class="mini-timer-date">{{ launchState.decisions ? 'Estimated decisions: December 16, 2026 · 6:28 PM EST' : 'Submit by November 1, 2026 · 11:59 PM EST' }}</div>
-        </div>
-      </div>
-
-      <!-- Countdown -->
-      <div class="glass-card rounded-3xl p-10 md:p-14 mb-10 animate-fade-up">
-        <div class="flex items-end justify-center gap-4 md:gap-8 mb-10">
-          <template v-for="(unit, i) in timeUnits" :key="unit.label">
-            <div v-if="i > 0" class="countdown-separator">:</div>
-            <div class="countdown-digit-group">
-              <div class="countdown-number" :class="{ tick: unit.ticked }">
-                {{ unit.value.toString().padStart(2, '0') }}
-              </div>
-              <div class="countdown-label">{{ unit.label }}</div>
-            </div>
-          </template>
-        </div>
-
-        <div class="pt-6 border-t border-white/5">
-          <div class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-8 text-sm">
-            <div class="flex items-center gap-3">
-              <div class="pulse-dot"></div>
-              <span class="text-gray-500">{{ launchState.decisions ? "Estimated decisions" : "Deadline" }}</span>
-              <span class="text-white font-light">{{ launchState.decisions ? "December 16, 2026 · 6:28 PM EST" : "November 1, 2026 · 11:59 PM EST" }}</span>
-            </div>
-            <div class="hidden md:block w-px h-4 bg-white/10"></div>
-            <div class="flex items-center gap-3">
-              <span class="text-gray-600">Decisions</span>
-              <span class="text-gray-400 font-light">December 16 · Estimated</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid md:grid-cols-3 gap-4 mb-10">
-        <div class="glass-card-subtle stat-card rounded-2xl p-6 animate-fade-up animate-fade-up-delay-1">
-          <div class="section-label mb-3">Acceptance Rate</div>
-          <div class="text-4xl font-extralight gradient-text-red mb-1">4.6%</div>
-          <div class="text-xs text-gray-600">Class of 2030 · Overall</div>
-        </div>
-        <div class="glass-card-subtle stat-card rounded-2xl p-6 animate-fade-up animate-fade-up-delay-2">
-          <div class="section-label mb-3">Students Admitted</div>
-          <div class="text-4xl font-extralight text-white mb-1">1,299</div>
-          <div class="text-xs text-gray-600">Out of 28,349 applicants</div>
-        </div>
-        <div class="glass-card-subtle stat-card rounded-2xl p-6 animate-fade-up animate-fade-up-delay-3">
-          <div class="section-label mb-3">Early Action</div>
-          <div class="text-4xl font-extralight text-white mb-1">Non-Binding</div>
-          <div class="text-xs text-gray-600">Apply to other schools freely</div>
-        </div>
-      </div>
-
-      <!-- Motivational Quote -->
-      <div class="text-center mb-10 animate-fade-up animate-fade-up-delay-4">
-        <p class="text-sm text-gray-500 italic font-light max-w-lg mx-auto leading-relaxed">
-          "{{ currentQuote }}"
-        </p>
-      </div>
-
-      <!-- Application Checklist -->
+      <!-- Application Checklist · {{ launchState.event.label }} -->
       <div class="glass-card rounded-3xl p-8 md:p-12 mb-10">
         <div class="flex items-center justify-between mb-8">
           <div>
             <div class="section-label mb-2">Track Your Progress</div>
             <h2 class="text-2xl md:text-3xl font-extralight text-white tracking-wide">
-              Application Checklist
+              Application Checklist · {{ launchState.event.label }}
             </h2>
           </div>
           <div class="text-right">
@@ -262,9 +163,9 @@
                 </h3>
                 <p class="text-xs text-gray-500 leading-relaxed">{{ item.description }}</p>
               </div>
-              <div v-if="item.deadline" class="flex-shrink-0 hidden sm:block">
+              <div v-if="item.deadline && launchState.event.id === 'ea-deadline'" class="flex-shrink-0 hidden sm:block">
                 <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider bg-white/[0.03] px-2.5 py-1 rounded-md">
-                  {{ item.deadline }}
+                  {{ item.deadline.replace(/202[67]/g, year => String(launchState.cycleYear + Number(year === "2027"))) }}
                 </span>
               </div>
             </div>
@@ -338,6 +239,9 @@ const currentQuote = computed(() => quotes[quoteIndex.value])
 
 // ===== Countdown =====
 const launchState = ref(countdownState(Date.now()))
+watch(() => `${launchState.value.cycleYear}/${launchState.value.event.id}`, () => {
+  document.title = `MIT ${launchState.value.event.label} · Class of ${launchState.value.classYear}`
+}, { immediate: true })
 const days = ref(0)
 const hours = ref(0)
 const minutes = ref(0)
@@ -366,7 +270,7 @@ const updateCountdown = () => {
 }
 
 // ===== Application Open Countdown =====
-const appOpenDate = new Date('2026-08-01T00:00:00-04:00')
+const appOpenDate = computed(() => new Date(`${launchState.value.cycleYear}-08-01T00:00:00-04:00`))
 const appOpenDays = ref(0)
 const appOpenHours = ref(0)
 const appOpenMinutes = ref(0)
@@ -375,7 +279,7 @@ const appIsOpen = ref(false)
 
 const updateAppOpenCountdown = () => {
   const now = new Date().getTime()
-  const distance = appOpenDate - now
+  const distance = appOpenDate.value - now
 
   if (distance < 0) {
     appIsOpen.value = true
@@ -460,7 +364,7 @@ const checklistItems = ref([
   },
   {
     title: 'Submit MIT Application',
-    description: 'Final submission before 11:59 PM EST deadline via MyMIT portal',
+    description: 'Complete final submission before the deadline shown above; verify the exact time in your portal',
     deadline: 'Nov 1, 2026',
     completed: false,
   },
@@ -496,10 +400,15 @@ const toggleItem = (index) => {
 const saveChecklist = () => {
   const state = {}
   checklistItems.value.forEach((item) => { state[item.title] = item.completed })
-  localStorage.setItem('mitChecklistState', JSON.stringify(state))
+  localStorage.setItem(`mitChecklistState:${launchState.value.cycleYear}`,  JSON.stringify(state))
 }
 
 watch(checklistItems, saveChecklist, { deep: true })
+watch(() => launchState.value.cycleYear, () => {
+  let saved = {}
+  try { saved = JSON.parse(localStorage.getItem(`mitChecklistState:${launchState.value.cycleYear}`) || '{}') } catch {}
+  checklistItems.value.forEach(item => { item.completed = !!saved[item.title] })
+})
 
 // ===== Widget Dragging =====
 const isDragging = ref(false)
@@ -640,7 +549,7 @@ onMounted(() => {
     quoteIndex.value = (quoteIndex.value + 1) % quotes.length
   }, 12000)
 
-  const savedChecklist = localStorage.getItem('mitChecklistState')
+  const savedChecklist = (localStorage.getItem(`mitChecklistState:${launchState.value.cycleYear}`) || (launchState.value.cycleYear === 2026 ? localStorage.getItem('mitChecklistState') : null))
   if (savedChecklist) {
     try {
       const saved = JSON.parse(savedChecklist)
