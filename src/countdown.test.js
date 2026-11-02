@@ -2,8 +2,8 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { countdownState, cycleEvents, CYCLE_OVERRIDES } from './countdown.js'
 
-test('every milestone advances exactly at its boundary across ten cycles', () => {
-  for (let year = 2026; year < 2036; year++) {
+test('every milestone advances exactly at its boundary across a full century', () => {
+  for (let year = 2026; year < 2126; year++) {
     const events = cycleEvents(year)
     events.forEach((event, index) => {
       const before = countdownState(event.at - 1)
@@ -38,4 +38,15 @@ test('announced dates can override estimates and move the grace period', () => {
     assert.equal(events[5].at, at)
     assert.equal(events[6].at, at + 7 * 86400000)
   } finally { delete CYCLE_OVERRIDES[2026] }
+})
+
+
+test('reopening after decades jumps straight to the correct cycle', () => {
+  for (const year of [2040, 2075, 2100, 2125]) {
+    const state = countdownState(Date.parse(`${year}-09-01T12:00:00Z`))
+    assert.equal(state.cycleYear, year)
+    assert.equal(state.classYear, year + 5)
+    assert.equal(state.event.id, 'ea-deadline')
+    assert.ok(state.total > 0)
+  }
 })

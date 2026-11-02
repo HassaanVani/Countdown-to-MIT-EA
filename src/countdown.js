@@ -26,8 +26,6 @@ export function cycleEvents(year) {
   events.push({ id: 'grace', label: 'A week to breathe', at: events.at(-1).at + 7 * 86400000, note: 'A seven-day app grace period after the waitlist planning checkpoint. This does not mean MIT’s waitlist has closed.', source: 'https://mitadmissions.org/pages/wait-list-faq/' })
   return events
 }
-export const DEADLINE = cycleEvents(2026)[0].at
-export const DECISIONS = cycleEvents(2026)[1].at
 export function countdownState(now) {
   const easternYear = Number(new Intl.DateTimeFormat('en', { timeZone: 'America/New_York', year: 'numeric' }).format(now))
   let cycleYear = easternYear - 1

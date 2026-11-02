@@ -35,18 +35,19 @@
           <span>{{ event.label }}</span><small>{{ formatEventDate(event.at) }}{{ event.estimated ? ' · Estimated' : '' }}</small>
         </li>
       </ol>
-      <p class="launch-note">{{ state.cycleYear }}–{{ state.cycleYear + 1 }} cycle · After the grace period, the next year’s EA countdown begins automatically.</p>
+      <p class="launch-note">{{ state.cycleYear }}–{{ state.cycleYear + 1 }} cycle · Repeats every year · After the seven-day grace period, the next EA cycle begins automatically.</p>
     </div>
   </section>
 </template>
 <script setup>
 import { computed, ref, watch, onUnmounted } from 'vue'
-import { countdownState, DEADLINE, formatEventDate } from './countdown.js'
+import { countdownState, cycleEvents, formatEventDate } from './countdown.js'
 const props = defineProps({ state: { type: Object, required: true } })
 const previewSeconds = Number(new URLSearchParams(window.location.search).get('preview'))
 const preview = Number.isFinite(previewSeconds) && previewSeconds > 0 && previewSeconds <= 7200
 const previewStarted = Date.now()
-const state = computed(() => preview ? countdownState(DEADLINE - previewSeconds * 1000 + (props.state.now - previewStarted)) : props.state)
+const previewDeadline = cycleEvents(countdownState(previewStarted).cycleYear)[0].at
+const state = computed(() => preview ? countdownState(previewDeadline - previewSeconds * 1000 + (props.state.now - previewStarted)) : props.state)
 const exitPreview = () => { const url = new URL(window.location.href); url.searchParams.delete('preview'); window.location.assign(url.href) }
 const ceremony = ref(false)
 let ceremonyTimer

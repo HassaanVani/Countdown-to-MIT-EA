@@ -41,6 +41,8 @@ MIT does not guarantee waitlist news on May 15 or closure by the end of the app 
 
 Both EA and RA deadlines use the one-hour, ten-minute, final-minute, and ten-second escalation. Every milestone transition gets the chapter ceremony.
 
-Run `npm run dev` locally. Add `?preview=75` to rehearse the original EA finale and the transition. Preview is isolated from the real timer. Use `?preview=3610` or `?preview=610` for earlier checkpoints.
+Run `npm run dev` locally. Add `?preview=75` to rehearse the original EA finale and the transition. Preview uses the active cycle’s EA deadline and is isolated from the real timer. Use `?preview=3610` or `?preview=610` for earlier checkpoints.
 
 Run `npm test` for milestone boundaries, annual rollover, grace duration, DST, checkpoints, and date overrides. Run `npm run build` for the production build.
+
+The annual reset is perpetual: dates are generated from the current Eastern calendar year, with no final configured year or manual reset. Reopening the app after missed cycles immediately selects the current one. Boundary tests cover 2026–2125.

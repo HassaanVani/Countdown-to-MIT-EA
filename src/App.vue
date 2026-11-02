@@ -165,7 +165,7 @@
               </div>
               <div v-if="item.deadline && launchState.event.id === 'ea-deadline'" class="flex-shrink-0 hidden sm:block">
                 <span class="text-[0.6rem] text-gray-600 uppercase tracking-wider bg-white/[0.03] px-2.5 py-1 rounded-md">
-                  {{ item.deadline.replace(/202[67]/g, year => String(launchState.cycleYear + Number(year === "2027"))) }}
+                  {{ item.deadline.replace("{year}", String(launchState.cycleYear)).replace("{nextYear}", String(launchState.cycleYear + 1)) }}
                 </span>
               </div>
             </div>
@@ -305,67 +305,67 @@ const checklistItems = ref([
   {
     title: 'Complete MIT Application Profile',
     description: 'Fill out your basic information, activities, coursework, and honors on the MIT application',
-    deadline: 'Oct 15, 2026',
+    deadline: 'Oct 15, {year}',
     completed: false,
   },
   {
     title: 'Take Required SAT or ACT',
     description: 'MIT requires standardized test scores. Submit your strongest SAT or ACT scores.',
-    deadline: 'Oct 1, 2026',
+    deadline: 'Oct 1, {year}',
     completed: false,
   },
   {
     title: 'Write MIT Application Essays',
     description: 'Complete all MIT-specific essays and short answer questions (5 short answers required)',
-    deadline: 'Oct 20, 2026',
+    deadline: 'Oct 20, {year}',
     completed: false,
   },
   {
     title: 'Request Teacher Recommendations (2)',
     description: 'One from math/science teacher, one from humanities/social science/language teacher',
-    deadline: 'Sep 1, 2026',
+    deadline: 'Sep 1, {year}',
     completed: false,
   },
   {
     title: 'Request School Counselor Recommendation',
     description: 'Ask your school counselor for a letter of recommendation and school report',
-    deadline: 'Sep 1, 2026',
+    deadline: 'Sep 1, {year}',
     completed: false,
   },
   {
     title: 'List Activities & Honors',
     description: 'Detail your extracurriculars, leadership roles, awards, and achievements',
-    deadline: 'Oct 20, 2026',
+    deadline: 'Oct 20, {year}',
     completed: false,
   },
   {
     title: 'Complete Self-Reported Coursework',
     description: 'Enter all your high school courses and grades in the MIT application',
-    deadline: 'Oct 25, 2026',
+    deadline: 'Oct 25, {year}',
     completed: false,
   },
   {
     title: 'Prepare Maker Portfolio (Optional)',
     description: 'Submit work samples via SlideRoom for research, arts, or maker projects',
-    deadline: 'Oct 28, 2026',
+    deadline: 'Oct 28, {year}',
     completed: false,
   },
   {
     title: 'Review & Proofread Everything',
     description: 'Check for typos, verify all sections are complete, review with fresh eyes',
-    deadline: 'Oct 30, 2026',
+    deadline: 'Oct 30, {year}',
     completed: false,
   },
   {
     title: 'Submit Application Fee / Request Waiver',
     description: 'Pay $75 application fee or request fee waiver if eligible',
-    deadline: 'Nov 1, 2026',
+    deadline: 'Nov 1, {year}',
     completed: false,
   },
   {
     title: 'Submit MIT Application',
     description: 'Complete final submission before the deadline shown above; verify the exact time in your portal',
-    deadline: 'Nov 1, 2026',
+    deadline: 'Nov 1, {year}',
     completed: false,
   },
   {
@@ -377,7 +377,7 @@ const checklistItems = ref([
   {
     title: 'Submit Mid-Year Grades (February)',
     description: 'Update MIT with your first semester senior year grades via February update form',
-    deadline: 'Mid-Feb 2027',
+    deadline: 'Mid-Feb {nextYear}',
     completed: false,
   },
 ])
